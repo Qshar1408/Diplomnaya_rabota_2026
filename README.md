@@ -53,6 +53,189 @@
 1. Terraform сконфигурирован и создание инфраструктуры посредством Terraform возможно без дополнительных ручных действий, стейт основной конфигурации сохраняется в бакете или Terraform Cloud
 2. Полученная конфигурация инфраструктуры является предварительной, поэтому в ходе дальнейшего выполнения задания возможны изменения.
 
+
+### Решение. Часть 01
+
+#### 1.Создаём сервисный аккаунт. Подготавливаем backend (S3 bucket в созданном ЯО аккаунте)
+
+Файлы конфигов:
+1.main.tf (main.tf)[https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/bucket/main.tf)
+
+
+```bash
+terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
+symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # yandex_iam_service_account.gribanov_diplom will be created
+  + resource "yandex_iam_service_account" "gribanov_diplom" {
+      + created_at         = (known after apply)
+      + description        = "Service account for diploma project"
+      + folder_id          = (known after apply)
+      + id                 = (known after apply)
+      + labels             = (known after apply)
+      + name               = "gribanov-diplom"
+      + service_account_id = (known after apply)
+    }
+
+  # yandex_iam_service_account_static_access_key.sa_key will be created
+  + resource "yandex_iam_service_account_static_access_key" "sa_key" {
+      + access_key                   = (known after apply)
+      + created_at                   = (known after apply)
+      + description                  = "Static access keys for S3"
+      + encrypted_secret_key         = (known after apply)
+      + id                           = (known after apply)
+      + key_fingerprint              = (known after apply)
+      + output_to_lockbox_version_id = (known after apply)
+      + secret_key                   = (sensitive value)
+      + service_account_id           = (known after apply)
+    }
+
+  # yandex_resourcemanager_folder_iam_binding.storage_admin will be created
+  + resource "yandex_resourcemanager_folder_iam_binding" "storage_admin" {
+      + folder_id = "b1g3sfourkjnlhsdmlut"
+      + members   = [
+          + (known after apply),
+        ]
+      + role      = "storage.admin"
+    }
+
+  # yandex_storage_bucket.diplom_bucket will be created
+  + resource "yandex_storage_bucket" "diplom_bucket" {
+      + acl                   = "private"
+      + bucket                = "gribanov-diplom"
+      + bucket_domain_name    = (known after apply)
+      + default_storage_class = (known after apply)
+      + folder_id             = (known after apply)
+      + force_destroy         = true
+      + id                    = (known after apply)
+      + policy                = (known after apply)
+      + website_domain        = (known after apply)
+      + website_endpoint      = (known after apply)
+
+      + anonymous_access_flags {
+          + list = false
+          + read = false
+        }
+
+      + grant (known after apply)
+
+      + versioning {
+          + enabled = true
+        }
+    }
+
+  # yandex_storage_object.terraform_tfvars will be created
+  + resource "yandex_storage_object" "terraform_tfvars" {
+      + acl          = "private"
+      + bucket       = "gribanov-diplom"
+      + content_type = (known after apply)
+      + id           = (known after apply)
+      + key          = "terraform.tfvars"
+      + source       = "./image.jpg"
+    }
+
+Plan: 5 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + access_key         = (sensitive value)
+  + bucket_name        = "gribanov-diplom"
+  + secret_key         = (sensitive value)
+  + service_account_id = (known after apply)
+╷
+│ Warning: Argument is deprecated
+│ 
+│   with yandex_storage_bucket.diplom_bucket,
+│   on main.tf line 54, in resource "yandex_storage_bucket" "diplom_bucket":
+│   54:   acl      = "private"
+│ 
+│ Use `yandex_storage_bucket_grant` instead.
+│ 
+│ (and one more similar warning elsewhere)
+╵
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run
+"terraform apply" now.
+```
+
+
+
+```bash
+terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
+symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # yandex_vpc_network.network will be created
+  + resource "yandex_vpc_network" "network" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "gribanov-network"
+      + subnet_ids                = (known after apply)
+    }
+
+  # yandex_vpc_subnet.subnet_a will be created
+  + resource "yandex_vpc_subnet" "subnet_a" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-a"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.0.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
+
+  # yandex_vpc_subnet.subnet_b will be created
+  + resource "yandex_vpc_subnet" "subnet_b" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-b"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.1.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-b"
+    }
+
+  # yandex_vpc_subnet.subnet_d will be created
+  + resource "yandex_vpc_subnet" "subnet_d" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-d"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.2.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-d"
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+```
+
+
+
 ---
 ### Создание Kubernetes кластера
 
