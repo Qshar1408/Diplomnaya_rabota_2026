@@ -59,7 +59,7 @@
 #### 1.Создаём сервисный аккаунт. Подготавливаем backend (S3 bucket в созданном ЯО аккаунте)
 
 Файлы конфигов:
-1.main.tf (main.tf)[https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/bucket/main.tf)
+1.main.tf [main.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/bucket/main.tf)
 
 
 ```bash
