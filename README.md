@@ -285,6 +285,553 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 2. В файле `~/.kube/config` находятся данные для доступа к кластеру.
 3. Команда `kubectl get pods --all-namespaces` отрабатывает без ошибок.
 
+
+### Решение. Часть 02.
+
+
+```bash
+terraform plan
+data.yandex_compute_image.ubuntu: Reading...
+yandex_vpc_address.grafana_ip: Refreshing state... [id=e9bn106pnc8ducbjk1pi]
+yandex_vpc_address.web_app_ip: Refreshing state... [id=e9bj3045vubpf3444k81]
+data.yandex_compute_image.ubuntu: Read complete after 0s [id=fd8i5gvlr8t2tcesgf2g]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
+symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # yandex_compute_instance.master will be created
+  + resource "yandex_compute_instance" "master" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = (known after apply)
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = <<-EOT
+                qshar:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN9YRaPI5Y4FrDzkjpBIzWxrb2Bi4bDb5fmCCSLXpQO6 qshar@qsharpcub05
+            EOT
+        }
+      + name                      = "gribanov-master"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v2"
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-d"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8i5gvlr8t2tcesgf2g"
+              + name        = (known after apply)
+              + size        = 50
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index          = (known after apply)
+          + ip_address     = (known after apply)
+          + ipv4           = true
+          + ipv6           = (known after apply)
+          + ipv6_address   = (known after apply)
+          + mac_address    = (known after apply)
+          + nat            = true
+          + nat_ip_address = (known after apply)
+          + nat_ip_version = (known after apply)
+          + subnet_id      = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 100
+          + cores         = 2
+          + memory        = 6
+        }
+
+      + scheduling_policy (known after apply)
+    }
+
+  # yandex_compute_instance.worker[0] will be created
+  + resource "yandex_compute_instance" "worker" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = (known after apply)
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = <<-EOT
+                qshar:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN9YRaPI5Y4FrDzkjpBIzWxrb2Bi4bDb5fmCCSLXpQO6 qshar@qsharpcub05
+            EOT
+        }
+      + name                      = "gribanov-worker-1"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v2"
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-a"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8i5gvlr8t2tcesgf2g"
+              + name        = (known after apply)
+              + size        = 50
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index          = (known after apply)
+          + ip_address     = (known after apply)
+          + ipv4           = true
+          + ipv6           = (known after apply)
+          + ipv6_address   = (known after apply)
+          + mac_address    = (known after apply)
+          + nat            = true
+          + nat_ip_address = (known after apply)
+          + nat_ip_version = (known after apply)
+          + subnet_id      = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 100
+          + cores         = 2
+          + memory        = 4
+        }
+
+      + scheduling_policy {
+          + preemptible = false
+        }
+    }
+
+  # yandex_compute_instance.worker[1] will be created
+  + resource "yandex_compute_instance" "worker" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = (known after apply)
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = <<-EOT
+                qshar:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN9YRaPI5Y4FrDzkjpBIzWxrb2Bi4bDb5fmCCSLXpQO6 qshar@qsharpcub05
+            EOT
+        }
+      + name                      = "gribanov-worker-2"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v2"
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-b"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8i5gvlr8t2tcesgf2g"
+              + name        = (known after apply)
+              + size        = 50
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index          = (known after apply)
+          + ip_address     = (known after apply)
+          + ipv4           = true
+          + ipv6           = (known after apply)
+          + ipv6_address   = (known after apply)
+          + mac_address    = (known after apply)
+          + nat            = true
+          + nat_ip_address = (known after apply)
+          + nat_ip_version = (known after apply)
+          + subnet_id      = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 100
+          + cores         = 2
+          + memory        = 4
+        }
+
+      + scheduling_policy {
+          + preemptible = false
+        }
+    }
+
+  # yandex_compute_instance.worker[2] will be created
+  + resource "yandex_compute_instance" "worker" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = (known after apply)
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = <<-EOT
+                qshar:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN9YRaPI5Y4FrDzkjpBIzWxrb2Bi4bDb5fmCCSLXpQO6 qshar@qsharpcub05
+            EOT
+        }
+      + name                      = "gribanov-worker-3"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v2"
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-b"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8i5gvlr8t2tcesgf2g"
+              + name        = (known after apply)
+              + size        = 50
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index          = (known after apply)
+          + ip_address     = (known after apply)
+          + ipv4           = true
+          + ipv6           = (known after apply)
+          + ipv6_address   = (known after apply)
+          + mac_address    = (known after apply)
+          + nat            = true
+          + nat_ip_address = (known after apply)
+          + nat_ip_version = (known after apply)
+          + subnet_id      = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 100
+          + cores         = 2
+          + memory        = 4
+        }
+
+      + scheduling_policy {
+          + preemptible = false
+        }
+    }
+
+  # yandex_compute_instance.worker[3] will be created
+  + resource "yandex_compute_instance" "worker" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = (known after apply)
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = <<-EOT
+                qshar:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN9YRaPI5Y4FrDzkjpBIzWxrb2Bi4bDb5fmCCSLXpQO6 qshar@qsharpcub05
+            EOT
+        }
+      + name                      = "gribanov-worker-4"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v2"
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-b"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8i5gvlr8t2tcesgf2g"
+              + name        = (known after apply)
+              + size        = 50
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index          = (known after apply)
+          + ip_address     = (known after apply)
+          + ipv4           = true
+          + ipv6           = (known after apply)
+          + ipv6_address   = (known after apply)
+          + mac_address    = (known after apply)
+          + nat            = true
+          + nat_ip_address = (known after apply)
+          + nat_ip_version = (known after apply)
+          + subnet_id      = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 100
+          + cores         = 2
+          + memory        = 4
+        }
+
+      + scheduling_policy {
+          + preemptible = false
+        }
+    }
+
+  # yandex_lb_network_load_balancer.grafana_lb will be created
+  + resource "yandex_lb_network_load_balancer" "grafana_lb" {
+      + allow_zonal_shift   = (known after apply)
+      + created_at          = (known after apply)
+      + deletion_protection = (known after apply)
+      + folder_id           = (known after apply)
+      + id                  = (known after apply)
+      + name                = "gribanov-grafana-nlb"
+      + region_id           = (known after apply)
+      + type                = "external"
+
+      + attached_target_group {
+          + target_group_id = (known after apply)
+
+          + healthcheck {
+              + healthy_threshold   = 2
+              + interval            = 2
+              + name                = "grafana-hc"
+              + timeout             = 1
+              + unhealthy_threshold = 2
+
+              + http_options {
+                  + path = "/api/health"
+                  + port = 30080
+                }
+            }
+        }
+
+      + listener {
+          + name        = "grafana-listener"
+          + port        = 80
+          + protocol    = (known after apply)
+          + target_port = 30080
+
+          + external_address_spec {
+              + address    = "89.169.145.175"
+              + ip_version = "ipv4"
+            }
+        }
+    }
+
+  # yandex_lb_network_load_balancer.web_app_lb will be created
+  + resource "yandex_lb_network_load_balancer" "web_app_lb" {
+      + allow_zonal_shift   = (known after apply)
+      + created_at          = (known after apply)
+      + deletion_protection = (known after apply)
+      + folder_id           = (known after apply)
+      + id                  = (known after apply)
+      + name                = "gribanov-web-app-nlb"
+      + region_id           = (known after apply)
+      + type                = "external"
+
+      + attached_target_group {
+          + target_group_id = (known after apply)
+
+          + healthcheck {
+              + healthy_threshold   = 2
+              + interval            = 2
+              + name                = "web-app-hc"
+              + timeout             = 1
+              + unhealthy_threshold = 2
+
+              + http_options {
+                  + path = "/"
+                  + port = 30081
+                }
+            }
+        }
+
+      + listener {
+          + name        = "web-app-listener"
+          + port        = 80
+          + protocol    = (known after apply)
+          + target_port = 30081
+
+          + external_address_spec {
+              + address    = "89.169.132.165"
+              + ip_version = "ipv4"
+            }
+        }
+    }
+
+  # yandex_lb_target_group.grafana_workers will be created
+  + resource "yandex_lb_target_group" "grafana_workers" {
+      + created_at      = (known after apply)
+      + description     = (known after apply)
+      + folder_id       = (known after apply)
+      + id              = (known after apply)
+      + labels          = (known after apply)
+      + name            = "gribanov-grafana-workers-tg"
+      + region_id       = (known after apply)
+      + target_group_id = (known after apply)
+
+      + target {
+          + address   = (known after apply)
+          + subnet_id = (known after apply)
+        }
+      + target {
+          + address   = (known after apply)
+          + subnet_id = (known after apply)
+        }
+    }
+
+  # yandex_lb_target_group.web_workers will be created
+  + resource "yandex_lb_target_group" "web_workers" {
+      + created_at      = (known after apply)
+      + description     = (known after apply)
+      + folder_id       = (known after apply)
+      + id              = (known after apply)
+      + labels          = (known after apply)
+      + name            = "gribanov-web-workers-tg"
+      + region_id       = (known after apply)
+      + target_group_id = (known after apply)
+
+      + target {
+          + address   = (known after apply)
+          + subnet_id = (known after apply)
+        }
+      + target {
+          + address   = (known after apply)
+          + subnet_id = (known after apply)
+        }
+    }
+
+  # yandex_vpc_network.network will be created
+  + resource "yandex_vpc_network" "network" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "mkuliaev-network"
+      + subnet_ids                = (known after apply)
+    }
+
+  # yandex_vpc_subnet.subnet_a will be created
+  + resource "yandex_vpc_subnet" "subnet_a" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-a"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.0.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
+
+  # yandex_vpc_subnet.subnet_b will be created
+  + resource "yandex_vpc_subnet" "subnet_b" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-b"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.1.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-b"
+    }
+
+  # yandex_vpc_subnet.subnet_d will be created
+  + resource "yandex_vpc_subnet" "subnet_d" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-d"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.2.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-d"
+    }
+
+Plan: 13 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + master_public_ip  = (known after apply)
+  + worker_public_ips = [
+      + (known after apply),
+      + (known after apply),
+      + (known after apply),
+      + (known after apply),
+    ]
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run
+"terraform apply" now.
+```
+
 ---
 ### Создание тестового приложения
 
