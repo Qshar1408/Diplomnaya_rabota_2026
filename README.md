@@ -242,11 +242,11 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 "terraform apply" now.
 ```
 
-Выполнение:
+#### Выполнение:
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_001.png)
 
-Результат:
+#### Результат:
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_002.png)
 
@@ -288,7 +288,12 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 
 ### Решение. Часть 02.
 
-#### Так как для проверки работоспособности команды terraform destroy были удалены все изменения, разворачиваем заново все исходные компоненты (начиная с VPC и т.д.), плюс подготавливаем всё для кластера, в т.ч. и балансировщики.
+### Выполняем следующие задачи:
+1. Так как для проверки работоспособности команды terraform destroy были удалены все изменения, разворачиваем заново все исходные компоненты (начиная с VPC и т.д.);
+2. Подготавливаем всё для kuber-кластера;
+3. Разворачиваем и настраиваем баласировщики
+4. Разделяем воркеры по целевым группам (чтобы в будущем уже не возвращаться к этому вопросу)
+
 #### Файлы конфигов:
    * main.tf [main.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_02/main.tf)
    * variables.tf [variables.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_02/variables.tf)
@@ -837,6 +842,12 @@ Changes to Outputs:
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run
 "terraform apply" now.
 ```
+
+#### Выполнение:
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_010.png)
+
+#### Результат:
 
 ---
 ### Создание тестового приложения
