@@ -56,7 +56,7 @@
 
 ### Решение. Часть 01
 
-#### 1.Создаём сервисный аккаунт. Подготавливаем backend (S3 bucket в созданном ЯО аккаунте)
+#### 1. Создаём сервисный аккаунт. Подготавливаем backend (S3 bucket в созданном ЯО аккаунте). Создаём конфигурацию Terrafrom, используя созданный бакет ранее как бекенд для хранения стейт файла.
 
 Файлы конфигов:
    * main.tf [main.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/bucket/main.tf)
@@ -168,7 +168,24 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_001.png)
 
+Результат:
 
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_002.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_003.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_004.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_005.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_006.png)
+
+
+#### 2. Создаём VPC с подсетями в разных зонах доступности:
+
+Файлы конфигов:
+   * main.tf [main.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/main.tf)
+   * variables.tf [variables.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/variables.tf)
 
 ```bash
 terraform plan
@@ -238,6 +255,9 @@ Terraform will perform the following actions:
 Plan: 4 to add, 0 to change, 0 to destroy.
 ```
 
+Выполнение:
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_007.png)
 
 
 ---
