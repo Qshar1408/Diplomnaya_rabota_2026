@@ -56,11 +56,18 @@
 
 ### Решение. Часть 01
 
-#### 1. Создаём сервисный аккаунт. Подготавливаем backend (S3 bucket в созданном ЯО аккаунте). Создаём конфигурацию Terrafrom, используя созданный бакет ранее как бекенд для хранения стейт файла.
+### Выполняем следующие задачи:
+1. Создаём сервисный аккаунт;
+2. Подготавливаем backend (S3 bucket в созданном ЯО аккаунте).
+3. Создаём конфигурацию Terrafrom, используя созданный бакет ранее как бекенд для хранения стейт файла. Убеждаемся, что выполняется команда `terraform apply`.
+4. Создаём VPC с подсетями в разных зонах доступности
+5. Убеждаемся, выполняется команда `terraform destroy`.
 
-Файлы конфигов:
-   * main.tf [main.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/bucket/main.tf)
-   * variables.tf [variables.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/bucket/variables.tf)
+#### Файлы конфигов:
+   * main.tf [main.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/main.tf)
+   * variables.tf [variables.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/variables.tf)
+
+#### Проверяем:
 
 ```bash
 terraform plan
@@ -70,6 +77,21 @@ symbols:
   + create
 
 Terraform will perform the following actions:
+
+  # local_file.backend_hcl will be created
+  + resource "local_file" "backend_hcl" {
+      + content              = (sensitive value)
+      + content_base64sha256 = (known after apply)
+      + content_base64sha512 = (known after apply)
+      + content_md5          = (known after apply)
+      + content_sha1         = (known after apply)
+      + content_sha256       = (known after apply)
+      + content_sha512       = (known after apply)
+      + directory_permission = "0777"
+      + file_permission      = "0600"
+      + filename             = "./backend.hcl"
+      + id                   = (known after apply)
+    }
 
   # yandex_iam_service_account.gribanov_diplom will be created
   + resource "yandex_iam_service_account" "gribanov_diplom" {
@@ -139,63 +161,6 @@ Terraform will perform the following actions:
       + source       = "./image.jpg"
     }
 
-Plan: 5 to add, 0 to change, 0 to destroy.
-
-Changes to Outputs:
-  + access_key         = (sensitive value)
-  + bucket_name        = "gribanov-diplom"
-  + secret_key         = (sensitive value)
-  + service_account_id = (known after apply)
-╷
-│ Warning: Argument is deprecated
-│ 
-│   with yandex_storage_bucket.diplom_bucket,
-│   on main.tf line 54, in resource "yandex_storage_bucket" "diplom_bucket":
-│   54:   acl      = "private"
-│ 
-│ Use `yandex_storage_bucket_grant` instead.
-│ 
-│ (and one more similar warning elsewhere)
-╵
-
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run
-"terraform apply" now.
-```
-
-Выполнение:
-
-![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_001.png)
-
-Результат:
-
-![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_002.png)
-
-![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_003.png)
-
-![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_004.png)
-
-![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_005.png)
-
-![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_006.png)
-
-
-#### 2. Создаём VPC с подсетями в разных зонах доступности:
-
-Файлы конфигов:
-   * main.tf [main.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/main.tf)
-   * variables.tf [variables.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_01/variables.tf)
-
-```bash
-terraform plan
-
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
-symbols:
-  + create
-
-Terraform will perform the following actions:
-
   # yandex_vpc_network.network will be created
   + resource "yandex_vpc_network" "network" {
       + created_at                = (known after apply)
@@ -252,13 +217,52 @@ Terraform will perform the following actions:
       + zone           = "ru-central1-d"
     }
 
-Plan: 4 to add, 0 to change, 0 to destroy.
+Plan: 10 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + access_key         = (sensitive value)
+  + bucket_name        = "gribanov-diplom"
+  + secret_key         = (sensitive value)
+  + service_account_id = (known after apply)
+╷
+│ Warning: Argument is deprecated
+│ 
+│   with yandex_storage_bucket.diplom_bucket,
+│   on main.tf line 77, in resource "yandex_storage_bucket" "diplom_bucket":
+│   77:   acl      = "private"
+│ 
+│ Use `yandex_storage_bucket_grant` instead.
+│ 
+│ (and one more similar warning elsewhere)
+╵
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run
+"terraform apply" now.
 ```
 
 Выполнение:
 
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_001.png)
+
+Результат:
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_002.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_003.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_004.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_005.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_006.png)
+
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_007.png)
 
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_008.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_009.png)
 
 ---
 ### Создание Kubernetes кластера
