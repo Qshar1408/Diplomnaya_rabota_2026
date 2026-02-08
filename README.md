@@ -288,6 +288,12 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 
 ### Решение. Часть 02.
 
+#### Так как для проверки работоспособности команды terraform destroy были удалены все изменения, разворачиваем заново все исходные компоненты (начиная с VPC и т.д.), плюс подготавливаем всё для кластера, в т.ч. и балансировщики.
+#### Файлы конфигов:
+   * main.tf [main.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_02/main.tf)
+   * variables.tf [variables.tf](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/src_02/variables.tf)
+
+#### Проверяем:
 
 ```bash
 terraform plan
