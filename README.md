@@ -164,6 +164,9 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 "terraform apply" now.
 ```
 
+Выполнение:
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_001.png)
+
 
 
 ```bash
