@@ -849,6 +849,16 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 
 #### Результат:
 
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_011.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_012.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_013.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_014.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_015.png)
+
 ---
 ### Создание тестового приложения
 
