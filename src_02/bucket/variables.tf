@@ -11,7 +11,6 @@ variable "yc_zone" {
 }
 
 
-
 variable "ssh_username" {
   description = "Username for SSH access to the VM"
   type        = string
@@ -24,20 +23,19 @@ variable "ssh_username" {
   description = "ssh-keygen -t ed25519"
  }
 
-variable "access_key" {
-  description = "Access key для S3-хранилища Яндекс Облака"
+variable "s3_access_key" {
+  description = "Existing S3 access key"
   type        = string
   sensitive   = true
-  default     = ""
+  default     = ""  
 }
 
-variable "secret_key" {
-  description = "Secret key для S3-хранилища Яндекс Облака"
+variable "s3_secret_key" {
+  description = "Existing S3 secret key"
   type        = string
   sensitive   = true
-  default     = ""
+  default     = ""  
 }
-
 variable "ssh_user" {
   description = "SSH user name"
   type        = string
@@ -47,12 +45,5 @@ variable "ssh_user" {
 variable "public_key_path" {
   description = "Path to public SSH key"
   type        = string
-  default     = "/home/qshar/.ssh/id_rsa.pub"
-}
-
-variable "yc_token" {
-  description = "Yandex Cloud OAuth token"
-  type        = string
-  sensitive   = true
-  default     = ""  # Заполните здесь
+  default     = "~/.ssh/id_rsa.pub"
 }

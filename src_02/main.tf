@@ -97,7 +97,7 @@ resource "yandex_compute_instance" "master" {
   }
 
   metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.public_key_path)}"
+    ssh-keys = "${var.ssh_user}:${var.vms_ssh_root_key}"
   }
 }
 
@@ -130,7 +130,7 @@ resource "yandex_compute_instance" "worker" {
   }
 
   metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.public_key_path)}"
+    ssh-keys = "${var.ssh_user}:${var.vms_ssh_root_key}"
   }
 }
 
@@ -230,3 +230,19 @@ output "master_public_ip" {
 output "worker_public_ips" {
   value = yandex_compute_instance.worker[*].network_interface.0.nat_ip_address
 }
+
+output "master_private_ip" {
+  value = yandex_compute_instance.master.network_interface.0.ip_address
+}
+
+output "worker_private_ips" {
+  value = yandex_compute_instance.worker[*].network_interface.0.ip_address
+}
+
+#output "http_load_balancer_ip" {
+#  value = yandex_lb_network_load_balancer.http_lb.listener[0].external_address_spec[0].address
+#}
+
+#output "http_load_balancer_ip" {
+#  value = one(yandex_lb_network_load_balancer.http_lb.listener[*].external_address_spec[*].address)
+#}
