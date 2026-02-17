@@ -99,6 +99,9 @@ resource "yandex_compute_instance" "master" {
   metadata = {
     ssh-keys = "${var.ssh_user}:${var.vms_ssh_root_key}"
   }
+  scheduling_policy {
+    preemptible = true
+    }
 }
 
 # Воркеры
@@ -109,7 +112,7 @@ resource "yandex_compute_instance" "worker" {
   zone        = count.index == 0 ? "ru-central1-a" : "ru-central1-b" 
  
     scheduling_policy {
-    preemptible = false
+    preemptible = true
   }
 
   resources {
