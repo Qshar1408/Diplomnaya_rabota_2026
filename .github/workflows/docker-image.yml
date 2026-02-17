@@ -40,7 +40,7 @@ jobs:
 
  deploy:
    needs: build
-   if: startsWith(github.ref, 'refs/tags/v')
+   if: startsWith(github.ref, 'refs/tags/vers')
    runs-on: ubuntu-latest
    steps:
      - name: Set up kubectl
