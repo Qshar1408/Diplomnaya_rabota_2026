@@ -9,7 +9,7 @@ env:
  REGISTRY: docker.io
  IMAGE_NAME: qshar1408/my-nginx-app
  K8S_NAMESPACE: gribanov-diplom
- DEPLOYMENT_NAME: nginx-app
+ DEPLOYMENT_NAME: gribanov-diplom.ru
  CONTAINER_NAME: nginx
 
 jobs:
@@ -75,7 +75,6 @@ jobs:
      - name: Verify cluster access
        run: |
          kubectl version
-         kubectl get nodes
          kubectl -n gribanov-diplom get deploy
 
      - name: Update deployment image
