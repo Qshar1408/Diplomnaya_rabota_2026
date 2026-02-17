@@ -4,6 +4,7 @@
 *.tfvars
 *.tfvars.json
 terraform.tfvars
+.authorized_key.json
 
 # Crash log files
 crash.log
@@ -24,8 +25,6 @@ terraform.rc
 # Environment files
 .env
 key.json
-
-backend.hcl
 backend.hcl
 *.hcl
 *.tfvars
