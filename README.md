@@ -1617,11 +1617,16 @@ kubeadm_cert_sans:
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_017.png)
 
 2.4.18. Проверяем наличие ключа для ansible. Если нет - добавляем.
+
+```bash
 ls /home/ubuntu/.ssh/id_rsa
+```
 
 2.4.19. Проверяем наличие нужных прав
-chmod 600 ~/.ssh/id_rsa
 
+```bash
+chmod 600 ~/.ssh/id_rsa
+```
 
 ### 2.5. Запускаем ansible-playbook
 
@@ -1635,6 +1640,42 @@ ansible-playbook -i inventory/mycluster/inventory.ini \
 Результат выполнения:
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_018.png)
+
+### 2.6. Проверяем созданный кластер и доступы
+
+2.6.1. Создаём директорию
+
+```bash
+mkdir -p $HOME/.kube
+```
+
+2.6.2. Копируем файл конфигурации администратора Kubernetes в стандартное расположение конфигурации для текущего пользователя
+
+```bash
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+```
+
+2.6.3. Изменяем владельца и группу файла конфигурации kubectl на текущего пользователя
+
+```bash
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+2.6.4. Выводим список нод кластера и их статус
+
+```bash
+kubectl get nodes
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_019.png)
+
+2.6.5. Выводим все запущенные поды и их статус
+
+```bash
+kubectl get pods --all-namespaces
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_020.png)
 
 
 
