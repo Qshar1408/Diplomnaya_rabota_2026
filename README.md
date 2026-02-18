@@ -2043,15 +2043,102 @@ docker push qshar1408/my-nginx-app:latest
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_032.png)
 
-
 ### 5. Установка и запуск приложения в кластере
 
+5.1. Подключаемся к мастер-ноде:
 
+```bash
+ssh -A ubuntu@158.160.227.165
+```
 
+5.1. Создаём рабочее пространство
 
+```bash
+kubectl create namespace gribanov-diplom
+```
 
-После, проверяем доступность графаны и нашей странички по 80 порту!
+5.2.Создаём манифест деплоймента 
 
+```bash
+nano app-deployment.yaml
+```
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: gribanov-diplom.ru
+ namespace: gribanov-diplom
+ labels:
+   app: web-app
+spec:
+ replicas: 2
+ selector:
+   matchLabels:
+     app: web-app
+ template:
+   metadata:
+     labels:
+       app: web-app
+   spec:
+     containers:
+       - name: gribanov-diplom-nginx
+         image:  qshar1408/my-nginx-app:latest
+         resources:
+            requests:
+               cpu: "1"
+               memory: "200Mi"
+            limits:
+               cpu: "2"
+               memory: "800Mi"
+         ports:
+           - containerPort: 80
+```
+
+5.3. Создаём манифест сервиса для него
+
+```bash
+nano app-service.yaml
+```
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+ name: gribanov-diplom-service
+ namespace: gribanov-diplom
+spec:
+ type: NodePort
+ selector:
+   app: web-app
+ ports:
+ - port: 80
+   targetPort: 80
+   nodePort: 30081
+```
+
+5.4. Деплоим
+
+```bash
+kubectl apply -f app-deployment.yaml
+kubectl apply -f app-service.yaml
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_033.png)
+
+5.5. Проверяем созданный поды
+
+```bash
+kubectl get pods --all-namespaces
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_034.png)
+
+5.6. Идём на общий адрес веб-приложения, и проверяем работоспособность
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_035.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_036.png)
 
 
 ## Что необходимо для сдачи задания?
