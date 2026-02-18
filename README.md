@@ -1755,6 +1755,8 @@ kubectl get pods -l app.kubernetes.io/name=grafana -o wide
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_024.png)
 
+[Общий адрес для веб-приложения](http://93.77.181.244)
+
 3.10. Пароль от grafana
 
 ```bash
@@ -2139,6 +2141,8 @@ kubectl get pods --all-namespaces
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_035.png)
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_036.png)
+
+[Общий адрес для веб-приложения](http://93.77.183.119)
 
 ### 6. Установка и настройка CI/CD
 
