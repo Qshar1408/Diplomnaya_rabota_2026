@@ -145,7 +145,7 @@
 
 <details>
  <summary>main.tf</summary>   
- ```bash
+
     terraform {
   required_providers {
     yandex = {
@@ -263,7 +263,7 @@ output "bucket_name" {
   value = yandex_storage_bucket.diplom_bucket.bucket
 }
 
-</details>```
+</details>
 
 Выполняем Terraform plan:
 
