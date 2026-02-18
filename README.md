@@ -1749,11 +1749,11 @@ kubectl get pods -l app.kubernetes.io/name=grafana -o wide
 
 3.9. Проверяем графану на балансировщике (по http, а не https!)
 
-[Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_022.png)
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_022.png)
 
-[Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_023.png)
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_023.png)
 
-[Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_024.png)
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_024.png)
 
 3.10. Пароль от grafana
 
