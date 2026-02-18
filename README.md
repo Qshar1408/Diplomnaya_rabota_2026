@@ -145,6 +145,7 @@
 
     **main.tf**
     <details>
+    ```
     terraform {
   required_providers {
     yandex = {
@@ -261,6 +262,7 @@ output "secret_key" {
 output "bucket_name" {
   value = yandex_storage_bucket.diplom_bucket.bucket
 }
+```
     </details>
 
 Выполняем Terraform plan:
