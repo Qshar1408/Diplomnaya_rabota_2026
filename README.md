@@ -2140,7 +2140,281 @@ kubectl get pods --all-namespaces
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_036.png)
 
+### 6. Установка и настройка CI/CD
 
+6.1.Создаём docker-image.yml
+
+```bash
+nano /.github/workflows/docker-image.yaml
+```
+
+<details>
+<summary>docker-image.yaml</summary>
+
+```yaml
+name: Docker Build and Deploy
+
+on:
+ push:
+   branches: [main]
+   tags: ['v*.*.*']
+
+env:
+ REGISTRY: docker.io
+ IMAGE_NAME: qshar1408/my-nginx-app
+ K8S_NAMESPACE: gribanov-diplom
+ DEPLOYMENT_NAME: gribanov-diplom.ru
+ CONTAINER_NAME: nginx
+
+jobs:
+ build:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v4
+
+     - name: Set up Docker Buildx
+       uses: docker/setup-buildx-action@v3
+
+     - name: Log in to Docker Hub
+       uses: docker/login-action@v3
+       with:
+         username: ${{ secrets.DOCKER_USERNAME }}
+         password: ${{ secrets.DOCKER_PASSWORD }}
+
+     - name: Build and Push Docker image
+       uses: docker/build-push-action@v5
+       with:
+         context: ./my_app 
+         file: ./my_app/Dockerfile
+         tags: |
+           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+         push: ${{ startsWith(github.ref, 'refs/tags/vers') }}
+
+ deploy:
+   needs: build
+   if: startsWith(github.ref, 'refs/tags/vers')
+   runs-on: ubuntu-latest
+   steps:
+     - name: Set up kubectl
+       uses: azure/setup-kubectl@v3
+       with:
+         version: "v1.28.5"  
+
+     - name: Configure kubeconfig (insecure)
+       run: |
+         mkdir -p ~/.kube
+         cat <<EOF > ~/.kube/config
+         apiVersion: v1
+         clusters:
+         - cluster:
+             insecure-skip-tls-verify: true
+             server: https://158.160.227.165:6443 
+           name: insecure-cluster
+         contexts:
+         - context:
+             cluster: insecure-cluster
+             user: ci-admin
+           name: insecure-context
+         current-context: insecure-context
+         kind: Config
+         users:
+         - name: ci-admin
+           user:
+             token: "${{ secrets.K8S_ADMIN_TOKEN }}"
+         EOF
+         chmod 600 ~/.kube/config
+
+     - name: Verify cluster access
+       run: |
+         kubectl version
+         kubectl -n gribanov-diplom get deploy
+
+     - name: Update deployment image
+       run: |
+         kubectl -n gribanov-diplom set image deploy/gribanov-diplom.ru \
+           gribanov-diplom-nginx=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+
+     - name: Verify deployment
+       run: |
+         kubectl -n gribanov-diplom rollout status deploy/gribanov-diplom.ru --timeout=180s
+         kubectl -n gribanov-diplom get pods
+```
+</details>
+
+Не забываем в файле docker-image.yml сменить/проверить адрес мастер-ноды
+
+6.2. Заходим на мастер-ноду. Получаем конфиг кубера, и заменяем в GitHub в разделе Settings "Kube_config"
+
+```bash
+sudo cat  ~/.kube/config
+```
+
+6.3. Здесь же получаем K8S_ADMIN_TOKEN
+
+6.3.1. Создаём аккаунт
+
+```bash
+kubectl create serviceaccount ci-admin -n kube-system
+```
+
+6.3.2. Создаём скрипт
+
+```bash
+nano ci-admin-token.yaml
+```
+
+С следующим содержимым:
+
+```yaml
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: ci-admin-token
+  namespace: kube-system
+  annotations:
+    kubernetes.io/service-account.name: "ci-admin"
+```
+
+6.3.3. Выполняем скрипт:
+
+```bash
+kubectl apply -f ci-admin-token.yaml
+```
+
+6.3.4.Вытаскиваем значение:
+
+```bash
+kubectl get secret ci-admin-token -n kube-system -o jsonpath={.data.token} | base64 --decode
+```
+
+и подставляем в git в K8S_ADMIN_TOKEN (по аналогии с KUBE-CONFIG)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_037.png)
+
+6.4. Создаем корректные права для учётки:
+
+6.4.1. Создаём скрипт bash со следующим содержимым:
+
+```bash
+nano rule.bash
+```
+
+```bash
+cat <<EOF | kubectl apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: gribanov-diplom
+  name: deployment-updater
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "update", "patch"]
+EOF
+```
+
+Выполняем его: 
+
+```bash
+bash rule.bash
+```
+
+Создаём ещё один скрипт bash со следующим содержимым:
+
+```bash
+nano rule2.bash
+```
+
+```bash
+cat <<EOF | kubectl apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: gribanov-diplom
+  name: ci-admin-binding
+subjects:
+- kind: ServiceAccount
+  name: ci-admin
+  namespace: kube-system
+roleRef:
+  kind: Role
+  name: deployment-updater
+  apiGroup: rbac.authorization.k8s.io
+EOF
+```
+
+Выполняем его: 
+
+```bash
+bash rule2.bash
+```
+
+6.4.2. Раздаём доп. права (скорее всего понадобятся):
+
+```bash
+kubectl patch role deployment-updater -n gribanov-diplom --type='json' \
+  -p='[{"op": "add", "path": "/rules/-", "value": {"apiGroups": [""], "resources": ["pods"], "verbs": ["get", "list"]}}]'
+```
+6.5. Так же не забываем задать в GitHub креды для Docker_password Docker_Username!!!
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_037.png)
+
+### 7. Проверяем работу CI/CD
+
+7.1. Идём на локальную машину. Присваиваем тег и пушим
+
+```bash
+git add -A
+git commit -m "vers3.1.4"
+git tag -a vers3.1.4 -m "vers3.1.4"
+git push origin vers3.1.4
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_037_1.png)
+
+7.2. Теперь идём в GitHub -> Actions
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_038.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_039.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_040.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_041.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_042.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_043.png)
+
+7.3. Идём в DockerHub, и проверяем, что там появились наши сборки с версией 4.1.3 и latest
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_044.png)
+
+### 8. Проверка загруженного контейнера на выделенно машине (чтобы убедиться в работоспособности загруженного контейнера)
+
+8.1. Запускаем машину. Загружаем наш образ контейнера
+
+```bash
+docker pull qshat1408/my-nginx-app:vers3.1.4
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_045.png)
+
+8.2. Запускаем наш контейнер на свободном порту, пусть будет 4430. Проверяем, что запустился
+
+```bash
+docker run -d -p 4430:80 --name japan qshat1408/my-nginx-app:vers3.1.4
+docker ps
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_046.png)
+
+8.3.Заходим на http://localhost:4430, и убеждаемся, что наше приложение работает
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_047.png)
 
 
 ## Что необходимо для сдачи задания?
