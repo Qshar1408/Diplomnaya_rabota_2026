@@ -1,6 +1,6 @@
 # Дипломный практикум в Yandex.Cloud
 
-## Грибанов Антон. FOPS-31
+## Грибанов Антон. FOPS-31.
 
   * [Цели:](#цели)
   * [Этапы выполнения:](#этапы-выполнения)
@@ -134,6 +134,129 @@
 3. При создании тега (например, v1.0.0) происходит сборка и отправка с соответствующим label в регистри, а также деплой соответствующего Docker образа в кластер Kubernetes.
 
 ---
+
+## Решение
+
+ЗАДАНИЕ 1. Создание облачной инфраструктуры
+
+<details>
+```bash
+terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # local_file.backend_hcl will be created
+  + resource "local_file" "backend_hcl" {
+      + content              = (sensitive value)
+      + content_base64sha256 = (known after apply)
+      + content_base64sha512 = (known after apply)
+      + content_md5          = (known after apply)
+      + content_sha1         = (known after apply)
+      + content_sha256       = (known after apply)
+      + content_sha512       = (known after apply)
+      + directory_permission = "0777"
+      + file_permission      = "0600"
+      + filename             = "./backend.hcl"
+      + id                   = (known after apply)
+    }
+
+  # yandex_iam_service_account.gribanov_diplom will be created
+  + resource "yandex_iam_service_account" "gribanov_diplom" {
+      + created_at         = (known after apply)
+      + description        = "Service account for diploma project"
+      + folder_id          = (known after apply)
+      + id                 = (known after apply)
+      + labels             = (known after apply)
+      + name               = "gribanov-diplom"
+      + service_account_id = (known after apply)
+    }
+
+  # yandex_iam_service_account_static_access_key.sa_key will be created
+  + resource "yandex_iam_service_account_static_access_key" "sa_key" {
+      + access_key                   = (known after apply)
+      + created_at                   = (known after apply)
+      + description                  = "Static access keys for S3"
+      + encrypted_secret_key         = (known after apply)
+      + id                           = (known after apply)
+      + key_fingerprint              = (known after apply)
+      + output_to_lockbox_version_id = (known after apply)
+      + secret_key                   = (sensitive value)
+      + service_account_id           = (known after apply)
+    }
+
+  # yandex_resourcemanager_folder_iam_binding.storage_admin will be created
+  + resource "yandex_resourcemanager_folder_iam_binding" "storage_admin" {
+      + folder_id = "b1g3sfourkjnlhsdmlut"
+      + members   = [
+          + (known after apply),
+        ]
+      + role      = "storage.admin"
+    }
+
+  # yandex_storage_bucket.diplom_bucket will be created
+  + resource "yandex_storage_bucket" "diplom_bucket" {
+      + acl                   = "private"
+      + bucket                = "gribanov-diplom"
+      + bucket_domain_name    = (known after apply)
+      + default_storage_class = (known after apply)
+      + folder_id             = (known after apply)
+      + force_destroy         = true
+      + id                    = (known after apply)
+      + policy                = (known after apply)
+      + website_domain        = (known after apply)
+      + website_endpoint      = (known after apply)
+
+      + anonymous_access_flags {
+          + list = false
+          + read = false
+        }
+
+      + grant (known after apply)
+
+      + versioning {
+          + enabled = true
+        }
+    }
+
+  # yandex_storage_object.terraform_tfvars will be created
+  + resource "yandex_storage_object" "terraform_tfvars" {
+      + acl          = "private"
+      + bucket       = "gribanov-diplom"
+      + content_type = (known after apply)
+      + id           = (known after apply)
+      + key          = "terraform.tfvars"
+      + source       = "./image.jpg"
+    }
+
+Plan: 6 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + access_key         = (sensitive value)
+  + bucket_name        = "gribanov-diplom"
+  + secret_key         = (sensitive value)
+  + service_account_id = (known after apply)
+╷
+│ Warning: Argument is deprecated
+│ 
+│   with yandex_storage_bucket.diplom_bucket,
+│   on main.tf line 77, in resource "yandex_storage_bucket" "diplom_bucket":
+│   77:   acl      = "private"
+│ 
+│ Use `yandex_storage_bucket_grant` instead.
+│ 
+│ (and one more similar warning elsewhere)
+╵
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply"
+now.
+```
+</details>
+
 ## Что необходимо для сдачи задания?
 
 1. Репозиторий с конфигурационными файлами Terraform и готовность продемонстрировать создание всех ресурсов с нуля.
