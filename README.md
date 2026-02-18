@@ -510,6 +510,7 @@ resource "yandex_vpc_subnet" "subnet_d" {
 
 <details>
  <summary>cloud-init.tf</summary>   
+```
 users:
   - name: qshar
     groups: sudo
@@ -519,6 +520,7 @@ users:
       - ${vms_ssh_root_key}
 package_update: true
 package_upgrade: false
+```
 </details>
 
 <details>
