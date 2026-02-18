@@ -135,11 +135,11 @@
 
 ---
 
-## Решение
+# Решение
 
-### ЗАДАНИЕ 1. Создание облачной инфраструктуры
+## ЗАДАНИЕ 1. Создание облачной инфраструктуры
 
-#### 1.1. Создаем сервисный аккаунт. Подготавливаем backend.
+### 1.1. Создаем сервисный аккаунт. Подготавливаем backend.
 
 Конфиги [Bucket](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/bucket)
 
@@ -320,7 +320,7 @@ variable "public_key_path" {
 
 </details>
 
-#### 1.2. Выполняем Terraform plan:
+### 1.2. Выполняем Terraform plan:
 
 <details>
  <summary>Terraform plan</summary>
@@ -441,8 +441,21 @@ now.
 
 </details>
 
-#### 1.3. Выполняем Terraform apply
+### 1.3. Выполняем Terraform apply
 
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_001.png)
+
+### 1.4. Проверяем, что у нас получилось в итоге:
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_002.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_003.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_004.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_005.png)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_006.png)
 
 
 
