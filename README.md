@@ -139,7 +139,7 @@
 
 ЗАДАНИЕ 1. Создание облачной инфраструктуры
 
-<terraform plan>
+<details>
 
 terraform plan
 
@@ -255,7 +255,7 @@ Changes to Outputs:
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply"
 now.
 
-</terraform plan>
+</details>
 
 ## Что необходимо для сдачи задания?
 
