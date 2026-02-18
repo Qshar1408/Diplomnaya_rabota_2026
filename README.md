@@ -144,8 +144,8 @@
 Конфиги [Bucket](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/bucket)
 
     **main.tf**
-    <details>
-    ```
+<details>
+    
     terraform {
   required_providers {
     yandex = {
@@ -262,8 +262,8 @@ output "secret_key" {
 output "bucket_name" {
   value = yandex_storage_bucket.diplom_bucket.bucket
 }
-```
-    </details>
+
+</details>
 
 Выполняем Terraform plan:
 
