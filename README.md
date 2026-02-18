@@ -1761,6 +1761,261 @@ kubectl get pods -l app.kubernetes.io/name=grafana -o wide
 kubectl get secret prometheus-grafana -n default -o jsonpath="{.data.admin-password}" | base64 --decode
 ```
 
+### 4. Создаем наше приложение (сайт). Выполняем на рабочей машине
+
+4.1. Подготавливаем все файлы
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_028.png)
+
+<details>
+<summary>index.html</summary>
+
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Очарование Японии</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Подключаем шрифт Google Fonts для аутентичности -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <h1>🇯🇵 日本</h1>
+            <p>Страна восходящего солнца</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h2>Добро пожаловать в Японию</h2>
+            <p>Япония — удивительное сочетание древних традиций и ультрасовременных технологий. Здесь вековые храмы соседствуют с небоскрёбами, а чайные церемонии — с роботами.</p>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>🌸 Культура</h3>
+                <p>Театр Кабуки, икебана, оригами, самурайские мечи — культура Японии уникальна и узнаваема во всём мире.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🍣 Кухня</h3>
+                <p>Суши, рамен, темпура, вагю, саке — японская кухня внесена в список нематериального наследия ЮНЕСКО.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🗻 Природа</h3>
+                <p>Священная гора Фудзи, цветение сакуры, горячие источники онсэн и бамбуковые рощи Арасиямы.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Пример сайта о Японии для nginx</p>
+    </footer>
+</body>
+</html>
+```
+</details>
+
+<details>
+<summary>style.css</summary>
+
+```css
+/* Базовый сброс и шрифты */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #fefaf6;  /* нежно-персиковый */
+    color: #2e2e2e;
+    line-height: 1.6;
+}
+
+/* Шапка (hero) */
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                url('images/sakura.jpg') center/cover no-repeat;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+/* Если картинка не загрузится, подложка */
+.hero {
+    background-color: #b13b3b;  /* красный, как на флаге */
+    background-blend-mode: overlay;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    letter-spacing: 8px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.hero-content p {
+    font-size: 1.8rem;
+    font-weight: 300;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+/* Основной контент */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.intro h2 {
+    font-size: 2.5rem;
+    color: #a52a2a;
+    margin-bottom: 20px;
+}
+
+.intro p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Карточки особенностей */
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px 20px;
+    flex: 1 1 280px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+    border-top: 5px solid #b13b3b;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.feature-card h3 {
+    font-size: 1.8rem;
+    color: #b13b3b;
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    color: #555;
+}
+
+/* Футер */
+footer {
+    background-color: #2e2e2e;
+    color: #ddd;
+    text-align: center;
+    padding: 25px;
+    margin-top: 40px;
+    font-size: 0.95rem;
+}
+
+/* Адаптация */
+@media (max-width: 768px) {
+    .hero-content h1 { font-size: 2.8rem; }
+    .hero-content p { font-size: 1.4rem; }
+    .intro h2 { font-size: 2rem; }
+}
+```
+</details>
+
+<details>
+<summary>Dockerfile</summary>
+
+```yaml
+FROM nginx:1.23.1
+
+COPY static /usr/share/nginx/html
+#COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+```
+</details>
+
+<details>
+<summary>nginx.conf</summary>
+
+```conf
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name localhost;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+
+
+    # Кэширование статики (опционально)
+    location ~* \.(css|js|jpg|jpeg|png|gif|ico|svg)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+      error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/html;
+    }
+}
+```
+</details>
+
+
+4.2. Переходим в папку с проектом
+
+```bash
+cd /home/qshar/Diplomnaya_rabota_2026/my_app/
+```
+
+4.3. Авторизуемся на DockerHub. Создаём репозиторий.
+
+```bash
+docker login -u qshar1408
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_025.png)
+
+4.4. Билдим проект
+
+
+```bash
+docker build -t qshar1408/my-nginx-app:vers3.1 .
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_026.png)
+
+4.5. Пушим проект в DockerHub
+
+```bash
+docker push qshar1408/my-nginx-app:vers3.1
+```
+
 ## Что необходимо для сдачи задания?
 
 1. Репозиторий с конфигурационными файлами Terraform и готовность продемонстрировать создание всех ресурсов с нуля.
