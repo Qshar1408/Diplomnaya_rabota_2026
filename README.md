@@ -144,8 +144,9 @@
 Конфиги [Bucket](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/bucket)
 
 <details>
- <summary>main.tf</summary>   
+<summary>main.tf</summary>   
 
+```yaml
     terraform {
   required_providers {
     yandex = {
@@ -262,12 +263,13 @@ output "secret_key" {
 output "bucket_name" {
   value = yandex_storage_bucket.diplom_bucket.bucket
 }
-
+```
 </details>
 
 <details>
- <summary>variables.tf</summary>
+<summary>variables.tf</summary>
 
+```yaml
 variable "yc_cloud_id" {
   default = "b1g1ap2fp1jt638alsl9"
 }
@@ -317,14 +319,15 @@ variable "public_key_path" {
   type        = string
   default     = "~/.ssh/id_rsa.pub"
 }
-
+```
 </details>
 
 ### 1.2. Выполняем Terraform plan:
 
 <details>
- <summary>Terraform plan</summary>
+<summary>Terraform plan</summary>
 
+```yaml
 terraform plan
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
@@ -438,7 +441,7 @@ Changes to Outputs:
 
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply"
 now.
-
+```
 </details>
 
 ### 1.3. Выполняем Terraform apply:
@@ -842,8 +845,9 @@ variable "yc_token" {
 ### 2.2. Выполняем Terraform plan:
 
 <details>
- <summary>Terraform plan</summary>
+<summary>Terraform plan</summary>
 
+```yaml
 terraform plan
 data.yandex_compute_image.ubuntu: Reading...
 data.yandex_compute_image.ubuntu: Read complete after 0s [id=fd8t9g30r3pc23et5krl]
@@ -1420,7 +1424,7 @@ Changes to Outputs:
 
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply"
 now.
-
+```
 </details>
 
 ### 2.3. Проверяем, что получилось:
