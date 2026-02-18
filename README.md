@@ -1943,6 +1943,10 @@ footer {
 ```
 </details>
 
+Проверяем работу приложения (веб-странички)
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_028_1.png)
+
 <details>
 <summary>Dockerfile</summary>
 
@@ -2040,6 +2044,13 @@ docker push qshar1408/my-nginx-app:latest
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_032.png)
 
 
+### 5. Установка и запуск приложения в кластере
+
+
+
+
+
+После, проверяем доступность графаны и нашей странички по 80 порту!
 
 
 
