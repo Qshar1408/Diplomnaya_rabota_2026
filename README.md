@@ -509,7 +509,7 @@ resource "yandex_vpc_subnet" "subnet_d" {
 #### Конфиги: 
 
 <details>
- <summary>cloud-init.tf</summary> 
+<summary>cloud-init.tf</summary> 
 
 ```yaml
 users:
@@ -522,10 +522,10 @@ users:
 package_update: true
 package_upgrade: false
 
-</details>```
+</details> ```
 
 <details>
- <summary>main.tf</summary>  
+<summary>main.tf</summary>  
 
 ```yaml  
 terraform {
