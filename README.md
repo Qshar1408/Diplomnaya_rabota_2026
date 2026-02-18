@@ -521,8 +521,8 @@ users:
       - ${vms_ssh_root_key}
 package_update: true
 package_upgrade: false
-
-</details> ```
+```
+</details>
 
 <details>
 <summary>main.tf</summary>  
@@ -771,8 +771,8 @@ output "master_private_ip" {
 output "worker_private_ips" {
   value = yandex_compute_instance.worker[*].network_interface.0.ip_address
 }
-
-</details>```
+```
+</details>
 
 <details>
  <summary>variables.tf</summary> 
@@ -836,7 +836,8 @@ variable "yc_token" {
   sensitive   = true
   default     = ""  # Заполните здесь
 }
-</details>```
+```
+</details>
 
 ### 2.2. Выполняем Terraform plan:
 
