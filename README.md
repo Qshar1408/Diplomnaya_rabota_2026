@@ -1753,6 +1753,8 @@ kubectl get pods -l app.kubernetes.io/name=grafana -o wide
 
 [Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_023.png)
 
+[Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_024.png)
+
 3.10. Пароль от grafana
 
 ```bash
