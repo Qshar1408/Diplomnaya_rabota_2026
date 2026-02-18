@@ -139,8 +139,8 @@
 
 ЗАДАНИЕ 1. Создание облачной инфраструктуры
 
-<details>
-```bash
+<terraform plan>
+
 terraform plan
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
@@ -254,8 +254,8 @@ Changes to Outputs:
 
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply"
 now.
-```
-</details>
+
+</terraform plan>
 
 ## Что необходимо для сдачи задания?
 
