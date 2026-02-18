@@ -2051,13 +2051,13 @@ docker push qshar1408/my-nginx-app:latest
 ssh -A ubuntu@158.160.227.165
 ```
 
-5.1. Создаём рабочее пространство
+5.2. Создаём рабочее пространство
 
 ```bash
 kubectl create namespace gribanov-diplom
 ```
 
-5.2.Создаём манифест деплоймента 
+5.3.Создаём манифест деплоймента 
 
 ```bash
 nano app-deployment.yaml
@@ -2095,7 +2095,7 @@ spec:
            - containerPort: 80
 ```
 
-5.3. Создаём манифест сервиса для него
+5.4. Создаём манифест сервиса для него
 
 ```bash
 nano app-service.yaml
@@ -2117,7 +2117,7 @@ spec:
    nodePort: 30081
 ```
 
-5.4. Деплоим
+5.5. Деплоим
 
 ```bash
 kubectl apply -f app-deployment.yaml
@@ -2126,7 +2126,7 @@ kubectl apply -f app-service.yaml
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_033.png)
 
-5.5. Проверяем созданный поды
+5.6. Проверяем созданный поды
 
 ```bash
 kubectl get pods --all-namespaces
@@ -2134,11 +2134,13 @@ kubectl get pods --all-namespaces
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_034.png)
 
-5.6. Идём на общий адрес веб-приложения, и проверяем работоспособность
+5.7. Идём на общий адрес веб-приложения, и проверяем работоспособность
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_035.png)
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_036.png)
+
+
 
 
 ## Что необходимо для сдачи задания?
