@@ -1439,6 +1439,203 @@ now.
 
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_014.png)
 
+### 2.4. Подключаемся к мастер-ноде, и выполняем ряд следующих команд по её настройке:
+
+2.4.1. Обновляем
+
+```bash 
+sudo apt-get update && sudo apt-get install -y python3-pip git
+```
+
+2.4.2. Ставим pipx
+
+```bash
+sudo apt install pipx -y
+pipx ensurepath
+```
+
+2.4.3. Устанавливаем ansible
+
+```bash
+pipx install ansible==8.5.0
+```
+
+2.4.4. Создание виртуального окружения Python с помощью модуля venv. Активируем его
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+2.4.5. Переходик к kubespray:
+
+```bash
+git clone https://github.com/kubernetes-sigs/kubespray.git
+```
+
+2.4.6. Переходим в папку с kubespray
+
+```bash
+cd kubespray
+```
+
+2.4.7. Проверяем версию
+
+```bash
+git checkout v2.25.0
+```
+
+2.4.8. Устанавливаем все зависимости Python-проекта, перечисленные в файле requirements.txt
+
+
+```bash
+pip3 install -r requirements.txt
+```
+
+2.4.9. Копируем содержимое директории inventory/sample в новую директорию inventory/mycluster с сохранением атрибутов и принудительной перезаписью
+
+```bash
+cp -rfp inventory/sample inventory/mycluster
+```
+
+2.4.10. Задекларируем наши публичные адреса
+
+
+```bash
+declare -a IPS=(158.160.227.165 93.77.190.251 158.160.13.227 178.154.198.136 178.154.194.69) 
+CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
+```
+
+2.4.11. Создаем bash-скрипт:
+
+```bash
+nano gen_inventory_ini.sh
+```
+
+2.4.12. Заполняем следующим содержимым:
+
+```bash
+#!/bin/bash
+cd "$(dirname "$0")"
+
+# Получаем IP из Terraform
+MASTER_PUB=$(terraform output -raw master_public_ip)
+MASTER_PRIV=$(terraform output -raw master_private_ip)
+
+# Массивы для воркеров (в порядке worker-1, worker-2, worker-3, worker-4)
+mapfile -t WORKER_PUBS < <(terraform output -json worker_public_ips | jq -r '.[]')
+mapfile -t WORKER_PRIVS < <(terraform output -json worker_private_ips | jq -r '.[]')
+
+# Создаем inventory.ini
+cat > ../kubespray/inventory/mycluster/inventory.ini <<EOF
+[all]
+gribanov-master    ansible_host=$MASTER_PUB   ip=$MASTER_PRIV
+gribanov-worker-1  ansible_host=${WORKER_PUBS[0]}   ip=${WORKER_PRIVS[0]}
+gribanov-worker-2  ansible_host=${WORKER_PUBS[1]}   ip=${WORKER_PRIVS[1]}
+gribanov-worker-3  ansible_host=${WORKER_PUBS[2]}   ip=${WORKER_PRIVS[2]}
+gribanov-worker-4  ansible_host=${WORKER_PUBS[3]}   ip=${WORKER_PRIVS[3]}
+
+[kube_control_plane]
+gribanov-master
+
+[etcd]
+gribanov-master
+
+[kube_node]
+gribanov-worker-1
+gribanov-worker-2
+gribanov-worker-3
+gribanov-worker-4
+
+[calico_rr]
+
+[k8s_cluster:children]
+kube_control_plane
+kube_node
+calico_rr
+EOF
+```
+
+2.4.13. Устанавливаем jq
+
+```bash
+sudo apt install jq -y
+```
+2.4.14. Запускаем скрипт
+
+```bash
+bash gen_inventory_ini.sh
+```
+
+2.4.15. Открываем файл inventory.ini и редактируем его, если требуется
+
+```bash
+nano inventory/mycluster/inventory.ini 
+```
+
+На выходе получился следующий файл:
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_015.png)
+
+2.4.16. Теперь надо отредактировать k8s-cluster.yml. Добавляем следующие значения
+
+```bash
+nano inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+```
+
+```bash
+kubeadm_cert_sans:
+  - "158.160.227.165"
+  - "10.0.2.9"
+  - "127.0.0.1"
+```
+
+На выходе получился следующий файл:
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_016.png)
+
+
+2.4.17. Далее, редактируем k8s-net-calico.yml. Добавляем следующие значения
+
+```bash
+nano inventory/mycluster/group_vars/k8s_cluster/k8s-net-calico.yml
+```
+
+```bash
+kubeadm_cert_sans:
+  - "158.160.227.165"
+  - "10.0.2.9"
+  - "127.0.0.1"
+  - "kubernetes"
+  - "kubernetes.default"
+  - "kubernetes.default.svc"
+  - "kubernetes.default.svc.cluster.local"
+```
+
+На выходе получился следующий файл:
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_017.png)
+
+2.4.18. Проверяем наличие ключа для ansible. Если нет - добавляем.
+ls /home/ubuntu/.ssh/id_rsa
+
+2.4.19. Проверяем наличие нужных прав
+chmod 600 ~/.ssh/id_rsa
+
+
+### 2.5. Запускаем ansible-playbook
+
+```bash
+ansible-playbook -i inventory/mycluster/inventory.ini \
+  --become --become-user=root \
+  --private-key=~/.ssh/id_rsa \
+  cluster.yml
+```
+
+Результат выполнения:
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_018.png)
+
 
 
 ## Что необходимо для сдачи задания?
