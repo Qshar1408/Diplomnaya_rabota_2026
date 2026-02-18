@@ -137,7 +137,13 @@
 
 ## Решение
 
-ЗАДАНИЕ 1. Создание облачной инфраструктуры
+### ЗАДАНИЕ 1. Создание облачной инфраструктуры
+
+#### 1.1. Создаем сервисный аккаунт. Подготавливаем backend.
+
+Конфиги [Bucket](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/bucket)
+
+Выполняем Terraform plan:
 
 <details>
 
@@ -256,6 +262,10 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 now.
 
 </details>
+
+Выполняем Terraform apply
+
+
 
 ## Что необходимо для сдачи задания?
 
