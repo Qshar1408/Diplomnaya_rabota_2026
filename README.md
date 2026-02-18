@@ -265,9 +265,65 @@ output "bucket_name" {
 
 </details>
 
-Выполняем Terraform plan:
+<details>
+ <summary>variables.tf</summary>
+
+variable "yc_cloud_id" {
+  default = "b1g1ap2fp1jt638alsl9"
+}
+
+variable "yc_folder_id" {
+  default = "b1g3sfourkjnlhsdmlut"
+}
+
+variable "yc_zone" {
+  default = "ru-central1-a"
+}
+
+
+variable "ssh_username" {
+  description = "Username for SSH access to the VM"
+  type        = string
+  default     = "qshar"  
+}
+
+ variable "vms_ssh_root_key" {
+  type        = string
+  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN9YRaPI5Y4FrDzkjpBIzWxrb2Bi4bDb5fmCCSLXpQO6 qshar@qsharpcub05"
+  description = "ssh-keygen -t ed25519"
+ }
+
+variable "s3_access_key" {
+  description = "Existing S3 access key"
+  type        = string
+  sensitive   = true
+  default     = ""  
+}
+
+variable "s3_secret_key" {
+  description = "Existing S3 secret key"
+  type        = string
+  sensitive   = true
+  default     = ""  
+}
+variable "ssh_user" {
+  description = "SSH user name"
+  type        = string
+  default     = "qshar"
+}
+
+variable "public_key_path" {
+  description = "Path to public SSH key"
+  type        = string
+  default     = "~/.ssh/id_rsa.pub"
+}
+
+</details>
+
+#### 1.2. Выполняем Terraform plan:
 
 <details>
+ <summary>Terraform plan</summary>
 
 terraform plan
 
@@ -385,7 +441,8 @@ now.
 
 </details>
 
-Выполняем Terraform apply
+#### 1.3. Выполняем Terraform apply
+
 
 
 
