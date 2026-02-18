@@ -1678,6 +1678,86 @@ kubectl get pods --all-namespaces
 ![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_020.png)
 
 
+### 3.Переходим к установке и настройке Helm, Grafana, Prometheus
+
+3.1. Ставим Helm 
+
+```bash
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+```
+
+3.2. Добавляем репозиторий
+
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+```
+
+3.3. Создаём файл с настройками
+
+```bash
+nano values.yaml
+```
+
+3.4. Заполняем его
+
+```bash
+grafana:
+ nodeSelector:
+   app: grafana
+ service:
+   type: NodePort
+   port: 3000
+   targetPort: 3000
+   nodePort: 30080 
+
+prometheus:
+ prometheusSpec:
+   serviceMonitorSelectorNilUsesHelmValues: false
+   podMonitorSelectorNilUsesHelmValues: false
+```
+
+3.5. Устанавливаем с настройками выше
+
+```bash
+helm install prometheus prometheus-community/kube-prometheus-stack -f values.yaml
+```
+
+3.6. Помечаем воркеры
+
+```bash
+kubectl label nodes gribanov-worker-1 app=grafana
+kubectl label nodes gribanov-worker-2 app=grafana
+```
+
+3.7. Обновляем
+
+```bash
+helm upgrade prometheus prometheus-community/kube-prometheus-stack -f values.yaml
+```
+
+3.8. Проверяем наши поды
+
+```bash
+kubectl get pods -l app.kubernetes.io/name=grafana -o wide
+```
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_021.png)
+
+3.9. Проверяем графану на балансировщике (по http, а не https!)
+
+[Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_022.png)
+
+[Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_023.png)
+
+3.10. Пароль от grafana
+
+```bash
+kubectl get secret prometheus-grafana -n default -o jsonpath="{.data.admin-password}" | base64 --decode
+```
 
 ## Что необходимо для сдачи задания?
 
