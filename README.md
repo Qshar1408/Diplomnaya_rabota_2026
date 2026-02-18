@@ -509,7 +509,8 @@ resource "yandex_vpc_subnet" "subnet_d" {
 #### Конфиги: 
 
 <details>
- <summary>cloud-init.tf</summary>   
+ <summary>cloud-init.tf</summary> 
+
 ```yaml
 users:
   - name: qshar
@@ -524,7 +525,9 @@ package_upgrade: false
 </details>```
 
 <details>
- <summary>main.tf</summary>   
+ <summary>main.tf</summary>  
+
+```yaml  
 terraform {
   required_providers {
     yandex = {
@@ -769,10 +772,12 @@ output "worker_private_ips" {
   value = yandex_compute_instance.worker[*].network_interface.0.ip_address
 }
 
-</details>
+</details>```
 
 <details>
- <summary>variables.tf</summary>   
+ <summary>variables.tf</summary> 
+
+```yaml  
 variable "yc_cloud_id" {
   default = "b1g1ap2fp1jt638alsl9"
 }
@@ -831,7 +836,7 @@ variable "yc_token" {
   sensitive   = true
   default     = ""  # Заполните здесь
 }
-</details>
+</details>```
 
 ### 2.2. Выполняем Terraform plan:
 
