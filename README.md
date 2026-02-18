@@ -143,7 +143,7 @@
 
 Конфиги [Bucket](https://github.com/Qshar1408/Diplomnaya_rabota_2026/tree/main/bucket)
 
-    **main.tf**
+    main.tf
 <details>
     
     terraform {
