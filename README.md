@@ -2016,6 +2016,33 @@ docker build -t qshar1408/my-nginx-app:vers3.1 .
 docker push qshar1408/my-nginx-app:vers3.1
 ```
 
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_027.png)
+
+4.6. Создаем ещё один
+docker build -t my-nginx-app:latest .
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_029.png)
+
+4.7. Добавляем теги
+docker tag my-nginx-app qshar1408/my-nginx-app:vers3.1
+docker tag my-nginx-app qshar1408/my-nginx-app:latest
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_030.png)
+
+4.8.Пушим с тегами
+docker push qshar1408/my-nginx-app:vers3.1
+docker push qshar1408/my-nginx-app:latest
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_031.png)
+
+4.9.Идём в DockerHub и проверяем наличие
+
+![Diplomnaya_rabota_2026](https://github.com/Qshar1408/Diplomnaya_rabota_2026/blob/main/img/diplom_032.png)
+
+
+
+
+
 ## Что необходимо для сдачи задания?
 
 1. Репозиторий с конфигурационными файлами Terraform и готовность продемонстрировать создание всех ресурсов с нуля.
